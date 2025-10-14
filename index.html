@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบสอบถามกองทุนสำรองเลี้ยงชีพ TISCO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: white;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: none;
+        }
+
+        .info-box.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .rate-selection {
+            display: none;
+        }
+
+        .rate-selection.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .rate-options {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .rate-option {
+            position: relative;
+        }
+
+        .rate-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .rate-option label {
+            display: block;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .rate-option input[type="radio"]:checked + label {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .rate-option label:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+            display: none;
+        }
+
+        .btn-success.show {
+            display: block;
+        }
+
+        .success-message {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            color: #065f46;
+            font-weight: 600;
+            display: none;
+            margin-top: 20px;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            border-radius: 10px;
+            padding: 15px;
+            color: #991b1b;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">T</div>
+            <h1>แบบสอบถามการเปลี่ยนแปลงอัตราเงินสะสม</h1>
+            <p class="subtitle">กองทุนสำรองเลี้ยงชีพ TISCO</p>
+        </div>
+
+        <form id="surveyForm">
+            <div class="form-group">
+                <label for="empId">รหัสพนักงาน <span style="color: red;">*</span></label>
+                <input type="text" id="empId" placeholder="กรุณาระบุรหัสพนักงาน" required>
+                <div class="error-message" id="errorMsg">ไม่พบข้อมูลพนักงาน กรุณาตรวจสอบรหัสพนักงานอีกครั้ง</div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="searchBtn">ค้นหาข้อมูล</button>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>กำลังโหลดข้อมูล...</p>
+            </div>
+
+            <div class="info-box" id="infoBox">
+                <h3 style="margin-bottom: 15px; color: #667eea;">ข้อมูลพนักงาน</h3>
+                <div class="info-row">
+                    <span class="info-label">ฝ่าย:</span>
+                    <span class="info-value" id="division">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">แผนก:</span>
+                    <span class="info-value" id="department">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">กลุ่มงาน:</span>
+                    <span class="info-value" id="workgroup">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">อัตราเงินสะสมปัจจุบัน:</span>
+                    <span class="info-value" id="currentRate" style="color: #667eea; font-size: 18px;">-</span>
+                </div>
+            </div>
+
+            <div class="rate-selection" id="rateSelection">
+                <label>เลือกอัตราเงินสะสมที่ต้องการเปลี่ยนแปลง <span style="color: red;">*</span></label>
+                <div class="rate-options">
+                    <div class="rate-option">
+                        <input type="radio" id="rate6" name="newRate" value="6">
+                        <label for="rate6">6%</label>
+                    </div>
+                    <div class="rate-option">
+                        <input type="radio" id="rate7" name="newRate" value="7">
+                        <label for="rate7">7%</label>
+                    </div>
+                    <div class="rate-option">
+                        <input type="radio" id="rate8" name="newRate" value="8">
+                        <label for="rate8">8%</label>
+                    </div>
+                    <div class="rate-option">
+                        <input type="radio" id="rate9" name="newRate" value="9">
+                        <label for="rate9">9%</label>
+                    </div>
+                    <div class="rate-option">
+                        <input type="radio" id="rate10" name="newRate" value="10">
+                        <label for="rate10">10%</label>
+                    </div>
+                    <div class="rate-option">
+                        <input type="radio" id="rate11" name="newRate" value="11">
+                        <label for="rate11">11%</label>
+                    </div>
+                    <div class="rate-option">
+                        <input type="radio" id="rate12" name="newRate" value="12">
+                        <label for="rate12">12%</label>
+                    </div>
+                    <div class="rate-option">
+                        <input type="radio" id="rate13" name="newRate" value="13">
+                        <label for="rate13">13%</label>
+                    </div>
+                    <div class="rate-option">
+                        <input type="radio" id="rate14" name="newRate" value="14">
+                        <label for="rate14">14%</label>
+                    </div>
+                    <div class="rate-option">
+                        <input type="radio" id="rate15" name="newRate" value="15">
+                        <label for="rate15">15%</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success" id="submitBtn">ยืนยันการเปลี่ยนแปลง</button>
+            </div>
+
+            <div class="success-message" id="successMsg">
+                ✓ บันทึกข้อมูลเรียบร้อยแล้ว ระบบจะดำเนินการเปลี่ยนแปลงอัตราเงินสะสมของคุณในเดือนถัดไป
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Google Apps Script Web App URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOawvOWyBJmUTPWctTYKmfw4kDfzDnwwxNEJ1i3X74LiY2RbmBAaJmVgJOgqu6oHES/exec';
+
+        const empIdInput = document.getElementById('empId');
+        const searchBtn = document.getElementById('searchBtn');
+        const infoBox = document.getElementById('infoBox');
+        const rateSelection = document.getElementById('rateSelection');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMsg = document.getElementById('successMsg');
+        const errorMsg = document.getElementById('errorMsg');
+        const loading = document.getElementById('loading');
+        const surveyForm = document.getElementById('surveyForm');
+
+        let currentEmployee = null;
+
+        // ฟังก์ชันค้นหาข้อมูลพนักงานจาก Google Sheet
+        async function searchEmployee(empId) {
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=getEmployee&empId=${encodeURIComponent(empId)}`);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching employee data:', error);
+                return null;
+            }
+        }
+
+        // ฟังก์ชันบันทึกข้อมูลการเปลี่ยนแปลงอัตรา
+        async function saveSurvey(empId, division, department, workgroup, currentRate, newRate) {
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        action: 'saveSurvey',
+                        empId: empId,
+                        division: division,
+                        department: department,
+                        workgroup: workgroup,
+                        currentRate: currentRate,
+                        newRate: newRate,
+                        timestamp: new Date().toLocaleString('th-TH')
+                    })
+                });
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error saving survey:', error);
+                return { success: false };
+            }
+        }
+
+        searchBtn.addEventListener('click', async function() {
+            const empId = empIdInput.value.trim();
+            
+            if (!empId) {
+                errorMsg.textContent = 'กรุณาระบุรหัสพนักงาน';
+                errorMsg.classList.add('show');
+                return;
+            }
+
+            // แสดง Loading
+            loading.classList.add('show');
+            searchBtn.disabled = true;
+            errorMsg.classList.remove('show');
+            infoBox.classList.remove('show');
+            rateSelection.classList.remove('show');
+            successMsg.classList.remove('show');
+
+            // ค้นหาข้อมูล
+            const employee = await searchEmployee(empId);
+
+            // ซ่อน Loading
+            loading.classList.remove('show');
+            searchBtn.disabled = false;
+
+            if (employee && employee.success) {
+                currentEmployee = employee.data;
+                
+                document.getElementById('division').textContent = employee.data.division;
+                document.getElementById('department').textContent = employee.data.department;
+                document.getElementById('workgroup').textContent = employee.data.workgroup;
+                document.getElementById('currentRate').textContent = employee.data.currentRate + '%';
+
+                infoBox.classList.add('show');
+                rateSelection.classList.add('show');
+                submitBtn.classList.add('show');
+                
+                // Reset radio buttons
+                document.querySelectorAll('input[name="newRate"]').forEach(radio => {
+                    radio.checked = false;
+                });
+            } else {
+                errorMsg.textContent = 'ไม่พบข้อมูลพนักงาน กรุณาตรวจสอบรหัสพนักงานอีกครั้ง';
+                errorMsg.classList.add('show');
+            }
+        });
+
+        empIdInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchBtn.click();
+            }
+        });
+
+        surveyForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const selectedRate = document.querySelector('input[name="newRate"]:checked');
+            
+            if (!selectedRate) {
+                alert('กรุณาเลือกอัตราเงินสะสมที่ต้องการ');
+                return;
+            }
+
+            if (!currentEmployee) {
+                alert('เกิดข้อผิดพลาด กรุณาค้นหาข้อมูลพนักงานอีกครั้ง');
+                return;
+            }
+
+            // แสดง Loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'กำลังบันทึก...';
+
+            // บันทึกข้อมูล
+            const result = await saveSurvey(
+                empIdInput.value.trim(),
+                currentEmployee.division,
+                currentEmployee.department,
+                currentEmployee.workgroup,
+                currentEmployee.currentRate,
+                selectedRate.value
+            );
+
+            if (result.success) {
+                successMsg.classList.add('show');
+                submitBtn.textContent = 'บันทึกเรียบร้อยแล้ว';
+                
+                // รีเซ็ตฟอร์มหลัง 3 วินาที
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
+            } else {
+                alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่อีกครั้ง');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'ยืนยันการเปลี่ยนแปลง';
+            }
+        });
+    </script>
+</body>
+</html>
